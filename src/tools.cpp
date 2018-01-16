@@ -11,16 +11,11 @@ Tools::~Tools() {}
 
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
-  /**
-    * Calculate the RMSE here.
-  */
 
   VectorXd rmse(4);
   rmse << 0,0,0,0;
 
-  // check the validity of the following inputs:
-  //  * the estimation vector size should not be zero
-  //  * the estimation vector size should equal ground truth vector size
+  // vector size should not be zero
   if(estimations.size() != ground_truth.size() || estimations.size() == 0){
     std::cout << "Invalid estimation or ground_truth data" << std::endl;
     return rmse;
@@ -47,10 +42,6 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 }
 
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
-  /**
-    * Calculate a Jacobian here.
-  */
-  MatrixXd Hj(3,4);
   Hj << 0,0,0,0,
         0,0,0,0,
         0,0,0,0;
@@ -61,14 +52,13 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   float vx = x_state(2);
   float vy = x_state(3);
 
-  //pre-compute a set of terms to avoid repeated calculation
   float c1 = px*px+py*py;
   float c2 = sqrt(c1);
   float c3 = (c1*c2);
 
   //check division by zero
   if(fabs(c1) < 0.0001){
-    std::cout << "Function CalculateJacobian() has Error: Division by Zero" << std::endl;
+    std::cout << "Error: Division by Zero!!!" << std::endl;
     return Hj;
   }
 
