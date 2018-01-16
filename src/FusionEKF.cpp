@@ -35,7 +35,7 @@ FusionEKF::FusionEKF() {
   H_laser_ << 1, 0, 0, 0,
               0, 1, 0, 0;
 
-	// init kalman filter variables
+  // init kalman filter variables
   ekf_.P_ = MatrixXd(4, 4);
   ekf_.P_ << 1, 0, 0, 0,
              0, 1, 0, 0,
@@ -67,32 +67,33 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    // first measurement
   if (!is_initialized_) {
 
-    // state components
-	float py;
+  // state components
+  float py;
   float px;
-	float vx = 0;
+  float vx = 0;
   float vy = 0;
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-    	// if radar:
+      // if sensor type is radar:
       float rho = measurement_pack.raw_measurements_[0];
       float phi = measurement_pack.raw_measurements_[1];
-      px = rho * cos(phi);
+
       py = rho * sin(phi);
+      px = rho * cos(phi);
 
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER)
     {
-      // if laser:
-    	px = measurement_pack.raw_measurements_[0];
-		  py = measurement_pack.raw_measurements_[1];
+      // if sensor type is laser:
+      px = measurement_pack.raw_measurements_[0];
+      py = measurement_pack.raw_measurements_[1];
     }
     ekf_.x_ = VectorXd  (4);
-	  ekf_.x_ << px, py, vx, vy;
+    ekf_.x_ << px, py, vx, vy;
 
     previous_timestamp_ = measurement_pack.timestamp_;
 
-    // done initializing, no need to predict or update
+    // done initializing
     is_initialized_ = true;
     return;
   }
